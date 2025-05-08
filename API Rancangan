@@ -49,28 +49,20 @@ Endpoint ini digunakan untuk mengajukan pinjaman oleh pengguna melalui aplikasi 
 
 ==========================================================================================
 🔒 Security
-
     Autentikasi JWT / OAuth 2.0.
-
     Validasi field melalui schema.
-
     Upload file terenkripsi (opsional S3 atau server internal).
 
 ===========================================================================================
 
 🔁 Integrasi Lanjutan
-
 Setelah data masuk:
-
     ✅ Dikirim ke middleware SOA.
-
     🔄 Diteruskan ke core banking untuk verifikasi.
-
     🔍 Dipantau melalui Kibana (logging) dan Jenkins (CI/CD untuk proses backend).
 ==============================================================================================
 
 🔧 Dokumentasi
-
 Spesifikasi ini bisa ditulis dalam OpenAPI 3.1 (Swagger/Postman) agar bisa digunakan langsung dalam dokumentasi interaktif API.
 ===============================================================================================
 
@@ -104,4 +96,61 @@ Penggunaan URL API yang baik dan benar mengikuti prinsip RESTful API design, yan
 /api/v1/LoanApp/ApplyLoan    ← ❌ huruf besar & kata kerja
 /api/v1/loanSubmit           ← ❌ singular & tidak hierarkis
 
+================================================================================================
+Penggunaan alert dan kode error yang baik sangat penting untuk memastikan API kamu ramah untuk developer, mudah di-debug, dan aman digunakan. Berikut adalah panduan praktik terbaik disertai contoh yang bisa kamu terapkan dalam sistem pinjaman online.
 
+✅ 1. Struktur Response Error yang Konsisten
+Gunakan struktur JSON yang rapi dan konsisten:
+{
+  "status": "error",
+  "message": "Validasi gagal",
+  "errors": {
+    "loan_amount": "Jumlah pinjaman melebihi batas maksimum"
+  }
+}
+
+✅ 2. Gunakan HTTP Status Code yang Sesuai
+| Kode | Nama                  | Kapan Digunakan                                                             |
+| ---- | --------------------- | --------------------------------------------------------------------------- |
+| 200  | OK                    | Permintaan berhasil (untuk GET, PATCH sukses)                               |
+| 201  | Created               | Data berhasil dibuat (misalnya pengajuan pinjaman baru)                     |
+| 400  | Bad Request           | Format request tidak sesuai (misal: field kosong, JSON tidak valid)         |
+| 401  | Unauthorized          | Token tidak ada atau tidak valid                                            |
+| 403  | Forbidden             | Token valid tapi tidak punya izin (misal: user biasa akses admin)           |
+| 404  | Not Found             | Data tidak ditemukan (misal: loan ID tidak ada)                             |
+| 422  | Unprocessable Entity  | Validasi gagal, data sah secara format tapi tidak logis (misal: income < 0) |
+| 500  | Internal Server Error | Error di sisi server, misal exception tidak ditangani                       |
+
+✅ 3. Pesan Error yang Informatif Tapi Aman
+    Jangan tampilkan error database mentah ke client.
+    Jangan bocorkan detail server.
+    Tampilkan pesan yang jelas untuk user atau developer, misalnya:
+    {
+      "status": "error",
+      "message": "Token tidak valid atau sudah kedaluwarsa"
+    }
+
+✅ 4. Alert (Feedback) di Frontend
+Contoh praktik frontend alert yang baik:
+if (response.status === 422) {
+  alert("Data tidak valid: " + response.data.errors.loan_amount);
+} else if (response.status === 401) {
+  alert("Silakan login kembali. Sesi Anda telah habis.");
+} else {
+  alert("Terjadi kesalahan. Coba lagi nanti.");
+}
+
+✅ 5. Gunakan Kode Error Khusus (Opsional)
+Bisa tambahkan kode internal:
+{
+  "status": "error",
+  "code": "LOAN_LIMIT_EXCEEDED",
+  "message": "Jumlah pinjaman melebihi batas maksimal",
+  "errors": {
+    "loan_amount": "Maksimal Rp5.000.000"
+  }
+}
+=============================================================================================
+🔒 Tips Keamanan
+    Jangan expose stack trace di response API.
+    Gunakan log server dan tools seperti Kibana untuk error detail (bukan kirim ke client).
