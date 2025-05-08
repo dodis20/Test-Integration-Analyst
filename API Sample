@@ -1,0 +1,96 @@
+📌 1. POST — Ajukan Pinjaman Baru
+Endpoint
+POST /api/v1/loan/apply
+
+Contoh Kasus
+Seorang user ingin mengajukan pinjaman sebesar Rp3.000.000 dengan tenor 6 bulan untuk modal usaha.
+
+Contoh Payload
+{
+  "user_id": "USR-1001",
+  "loan_amount": 3000000,
+  "tenor_months": 6,
+  "purpose": "Modal usaha",
+  "monthly_income": 5000000,
+  "employment_status": "Wirausaha",
+  "documents": {
+    "ktp": "base64...",
+    "selfie_with_ktp": "base64..."
+  }
+}
+
+===================================================================================================================================
+
+📌 2. GET — Ambil Status Pinjaman
+Endpoint
+GET /api/v1/loan/{loan_id}
+
+Contoh Kasus
+User ingin mengecek status pinjaman yang sudah diajukan.
+Contoh
+
+GET /api/v1/loan/LOAN-20250507-001
+Authorization: Bearer <token>
+
+Contoh Response
+{
+  "loan_id": "LOAN-20250507-001",
+  "status": "Menunggu Verifikasi",
+  "submitted_at": "2025-05-07T13:00:00Z"
+}
+
+====================================================================================================================================
+
+📌 3. PUT — Perbarui Pengajuan Pinjaman (sebelum diproses)
+Endpoint
+PUT /api/v1/loan/{loan_id}
+
+Contoh Kasus
+User menyadari bahwa nominal pinjamannya salah, dan ingin mengubahnya sebelum diverifikasi.
+
+Contoh Payload
+{
+  "loan_amount": 4000000,
+  "tenor_months": 8,
+  "purpose": "Tambahan modal"
+}
+
+====================================================================================================================================
+
+📌 4. PATCH — Perbarui Sebagian Data
+Endpoint
+PATCH /api/v1/loan/{loan_id}
+
+Contoh Kasus
+User hanya ingin memperbarui tujuan pinjaman.
+
+Contoh Payload
+{
+  "purpose": "Renovasi rumah kecil"
+}
+
+=====================================================================================================================================
+
+📌 5. DELETE — Batalkan Pinjaman
+Endpoint
+DELETE /api/v1/loan/{loan_id}
+
+Contoh Kasus
+User berubah pikiran dan ingin membatalkan pengajuan pinjaman yang masih dalam status "Menunggu Verifikasi".
+
+Contoh
+DELETE /api/v1/loan/LOAN-20250507-001
+Authorization: Bearer <token>
+
+Contoh Response
+{
+  "status": "success",
+  "message": "Pengajuan pinjaman berhasil dibatalkan"
+}
+
+=======================================================================================================================================
+
+🔐 Catatan Umum
+
+    Semua endpoint wajib menggunakan token otorisasi (Authorization: Bearer <token>).
+    Operasi PUT, PATCH, dan DELETE hanya bisa dilakukan sebelum status pinjaman berubah menjadi "Diproses" atau "Disetujui".
