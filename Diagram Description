@@ -1,0 +1,94 @@
+Diagram ini menggambarkan arsitektur integrasi sistem fintech (khususnya pinjaman online) yang menggunakan pendekatan Service-Oriented Architecture (SOA) dengan beberapa tools modern:
+
+1. Mobile App (Kiri Atas)
+
+Menunjukkan antarmuka pengguna (frontend) yang digunakan oleh nasabah atau user untuk:
+
+    Mengajukan pinjaman
+
+    Melihat status pinjaman
+
+    Melakukan pembayaran
+
+2. Service Worker
+
+Menangani komunikasi background di aplikasi mobile, misalnya untuk:
+
+    Sinkronisasi data
+
+    Push notification
+
+    Manajemen sesi
+
+3. SOA Architecture Layer
+
+Terdapat middleware berbasis SOA (Service-Oriented Architecture) dengan komponen:
+
+    Service Contract
+
+    Service Implementation
+
+    Service Consumer
+
+Fungsi utama SOA:
+
+    Menstandarisasi komunikasi antara sistem internal dan eksternal.
+
+    Menyediakan reusable services.
+
+    Memfasilitasi integrasi dengan sistem perbankan inti atau layanan lain.
+
+4. Core Banking System
+
+Menjadi backend utama yang menangani:
+
+    Proses pencairan dana
+
+    Verifikasi akun bank
+
+    Pelunasan pinjaman
+
+    Simpanan dan giro
+
+5. OpenAPI 3.1
+
+Digunakan untuk mendefinisikan dan mendokumentasikan API dengan cara yang terstandarisasi, mendukung:
+
+    Auto-generasi dokumentasi API
+
+    Validasi kontrak
+
+    Konsumsi API lintas tim
+
+6. CI/CD Tools (Jenkins)
+
+Menunjukkan bahwa proses pengembangan dan deployment terotomatisasi melalui:
+
+    Jenkins sebagai CI/CD pipeline
+
+    Memastikan build, test, dan release berjalan otomatis
+
+7. Kibana
+
+Digunakan untuk:
+
+    Monitoring log API
+
+    Visualisasi data real-time
+
+    Debugging jika ada error/masalah performa
+
+=========================================================================================================================================
+
+🔁 Alur Singkat
+
+    User mengakses aplikasi → trigger API request.
+
+    Service Worker mengatur background sync & komunikasi.
+
+    API masuk ke layer SOA → diteruskan ke Core Banking System.
+
+    Hasil dipantau melalui Kibana, deployment dijaga via Jenkins.
+
+    Semua API terdokumentasi dengan OpenAPI 3.1.
+===========================================================================================================================================
