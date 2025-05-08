@@ -1,0 +1,74 @@
+📌 Endpoint
+POST /api/v1/loan/apply
+
+🎯 Deskripsi
+Endpoint ini digunakan untuk mengajukan pinjaman oleh pengguna melalui aplikasi mobile.
+
+===================================================================================================
+
+📥 Request Headers
+| Key           | Value            |
+| ------------- | ---------------- |
+| Authorization | Bearer `<token>` |
+| Content-Type  | application/json |
+
+📤 Request Body
+{
+  "user_id": "USR-982134",
+  "loan_amount": 3000000,
+  "tenor_months": 6,
+  "purpose": "Modal usaha",
+  "monthly_income": 5000000,
+  "employment_status": "Wirausaha",
+  "documents": {
+    "ktp": "base64_encoded_image",
+    "selfie_with_ktp": "base64_encoded_image"
+  }
+}
+
+✅ Response: Success (200)
+{
+  "status": "success",
+  "message": "Pengajuan pinjaman berhasil diajukan",
+  "data": {
+    "loan_id": "LOAN-20250507-001",
+    "status": "Menunggu Verifikasi",
+    "submitted_at": "2025-05-07T13:00:00Z"
+  }
+}
+
+❌ Response: Validation Error (400)
+{
+  "status": "error",
+  "message": "Validasi gagal",
+  "errors": {
+    "loan_amount": "Jumlah pinjaman melebihi batas maksimal"
+  }
+}
+
+
+==========================================================================================
+🔒 Security
+
+    Autentikasi JWT / OAuth 2.0.
+
+    Validasi field melalui schema.
+
+    Upload file terenkripsi (opsional S3 atau server internal).
+
+===========================================================================================
+
+🔁 Integrasi Lanjutan
+
+Setelah data masuk:
+
+    ✅ Dikirim ke middleware SOA.
+
+    🔄 Diteruskan ke core banking untuk verifikasi.
+
+    🔍 Dipantau melalui Kibana (logging) dan Jenkins (CI/CD untuk proses backend).
+==============================================================================================
+
+🔧 Dokumentasi
+
+Spesifikasi ini bisa ditulis dalam OpenAPI 3.1 (Swagger/Postman) agar bisa digunakan langsung dalam dokumentasi interaktif API.
