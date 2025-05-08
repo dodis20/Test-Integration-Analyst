@@ -72,3 +72,36 @@ Setelah data masuk:
 🔧 Dokumentasi
 
 Spesifikasi ini bisa ditulis dalam OpenAPI 3.1 (Swagger/Postman) agar bisa digunakan langsung dalam dokumentasi interaktif API.
+===============================================================================================
+
+Penggunaan URL API yang baik dan benar mengikuti prinsip RESTful API design, yang membuatnya konsisten, mudah dimengerti, dan scalable. Berikut adalah panduan serta contoh URL yang baik dalam konteks aplikasi pinjaman online:
+
+✅ Prinsip Penulisan URL API yang Baik
+| Aspek                                               | Prinsip Baik                                                          |
+| --------------------------------------------------- | --------------------------------------------------------------------- |
+| **Lowercase**                                       | Gunakan huruf kecil semua                                             |
+| **Kata benda (noun)**                               | Gunakan kata benda untuk merepresentasikan resource, bukan kata kerja |
+| **Plural**                                          | Gunakan bentuk jamak (contoh: `/loans`, bukan `/loan`)                |
+| **Hierarkis**                                       | Struktur URL mencerminkan hubungan data secara hierarki               |
+| **Tanpa versi di domain**                           | Letakkan versi API di path, bukan subdomain (contoh: `/api/v1/...`)   |
+| **Gunakan path untuk resource, query untuk filter** | `/loans?status=approved` → bukan `/getLoanByStatus/approved`          |
+
+🔧 Contoh URL API yang Baik dan Benar
+| Tujuan                                   | URL yang Baik                       | Metode   |
+| ---------------------------------------- | ----------------------------------- | -------- |
+| Dapatkan semua pengajuan pinjaman user   | `/api/v1/loans`                     | `GET`    |
+| Dapatkan satu pengajuan berdasarkan ID   | `/api/v1/loans/{loan_id}`           | `GET`    |
+| Ajukan pinjaman baru                     | `/api/v1/loans`                     | `POST`   |
+| Perbarui seluruh data pengajuan          | `/api/v1/loans/{loan_id}`           | `PUT`    |
+| Perbarui sebagian data (misalnya tujuan) | `/api/v1/loans/{loan_id}`           | `PATCH`  |
+| Batalkan pengajuan                       | `/api/v1/loans/{loan_id}`           | `DELETE` |
+| Ambil status pinjaman saja               | `/api/v1/loans/{loan_id}/status`    | `GET`    |
+| Ambil riwayat pembayaran pinjaman        | `/api/v1/loans/{loan_id}/payments`  | `GET`    |
+| Upload dokumen untuk pinjaman tertentu   | `/api/v1/loans/{loan_id}/documents` | `POST`   |
+
+🚫 Contoh URL yang Tidak Disarankan
+/api/v1/getLoanById?id=123   ← ❌ kata kerja & pakai query untuk resource utama
+/api/v1/LoanApp/ApplyLoan    ← ❌ huruf besar & kata kerja
+/api/v1/loanSubmit           ← ❌ singular & tidak hierarkis
+
+
