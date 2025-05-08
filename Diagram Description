@@ -1,6 +1,6 @@
 Diagram ini menggambarkan arsitektur integrasi sistem fintech (khususnya pinjaman online) yang menggunakan pendekatan Service-Oriented Architecture (SOA) dengan beberapa tools modern:
 
-1. Mobile App
+1. Microservices
 Logo kiri (merah):
 🔴 Red Hat OpenShift
 Platform Kubernetes enterprise dari Red Hat untuk mengelola container dan deployment aplikasi secara otomatis.
@@ -59,7 +59,7 @@ Digunakan untuk:
 
 🔁 Alur Singkat
 
-    User mengakses aplikasi → trigger API request.
+    User mengakses aplikasi → trigger API request Java Spring Boot.
     Service Worker mengatur background sync & komunikasi.
     API masuk ke layer SOA → diteruskan ke Core Banking System.
     Hasil dipantau melalui Kibana, deployment dijaga via Jenkins.
